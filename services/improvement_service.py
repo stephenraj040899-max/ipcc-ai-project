@@ -1,17 +1,17 @@
 from services.llm_service import model
 from services.prompt_loader import load_prompt
 
-review_prompt = load_prompt("review_prompt.txt")
+improvement_prompt = load_prompt("improvement_prompt.txt")
 
 
 def trim_text(text: str, max_chars: int = 36000):
     return text[:max_chars]
 
 
-def review_document(text: str):
+def improve_document(text: str):
     text = trim_text(text)
 
-    prompt = review_prompt.replace(
+    prompt = improvement_prompt.replace(
         "{text}",
         text,
     )

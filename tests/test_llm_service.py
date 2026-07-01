@@ -1,7 +1,10 @@
-from services.llm_service import generate_response
+from services.llm_service import ask_question
 
-response = generate_response(
-    "Say hello in one sentence."
-)
+question = "How can cities reduce greenhouse gas emissions?"
 
-print(response)
+answer = ask_question(question)
+
+print("\n")
+print("=" * 80)
+print(answer)
+print("=" * 80)

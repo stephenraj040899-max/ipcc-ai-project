@@ -1,72 +1,54 @@
 from google.cloud import bigquery
-import vertexai
-from vertexai.language_models import TextEmbeddingModel
-import numpy as np
 
-from config import PROJECT_ID, LOCATION, DATASET_ID, TABLE_ID
-
-# Initialize Vertex AI
-vertexai.init(
-    project=PROJECT_ID,
-    location=LOCATION
+from config import (
+    PROJECT_ID,
+    DATASET_ID,
+    DOCUMENTS_TABLE,
+    EMBEDDINGS_TABLE,
 )
 
-embedding_model = TextEmbeddingModel.from_pretrained(
-    "text-embedding-005"
-)
+from services.embedding_service import get_embedding
 
-client = bigquery.Client()
+client = bigquery.Client(project=PROJECT_ID)
 
-
-def cosine_similarity(vec1, vec2):
-    vec1 = np.array(vec1)
-    vec2 = np.array(vec2)
-
-    return np.dot(vec1, vec2) / (
-        np.linalg.norm(vec1) * np.linalg.norm(vec2)
-    )
+DOCUMENTS = f"{PROJECT_ID}.{DATASET_ID}.{DOCUMENTS_TABLE}"
+EMBEDDINGS = f"{PROJECT_ID}.{DATASET_ID}.{EMBEDDINGS_TABLE}"
 
 
-def search_documents(question, top_k=5):
+def search_documents(question: str, top_k: int = 5):
 
-    # Generate embedding for user question
-    query_embedding = embedding_model.get_embeddings(
-        [question]
-    )[0].values
-
-    table = f"{PROJECT_ID}.{DATASET_ID}.{TABLE_ID}"
+    query_embedding = get_embedding(question)
 
     query = f"""
     SELECT
-        document_name,
-        page,
-        content,
-        embedding
-    FROM `{table}`
-    WHERE embedding IS NOT NULL
+        base.id,
+        base.document_name,
+        base.chunk_index,
+        distance
+    FROM VECTOR_SEARCH(
+        TABLE `{EMBEDDINGS}`,
+        'embedding',
+        (
+            SELECT
+                @embedding AS embedding
+        ),
+        top_k => {top_k},
+        distance_type => 'COSINE'
+    )
+    ORDER BY distance
     """
 
-    rows = client.query(query).result()
-
-    results = []
-
-    for row in rows:
-
-        score = cosine_similarity(
-            query_embedding,
-            row.embedding
-        )
-
-        results.append({
-            "document": row.document_name,
-            "page": row.page,
-            "content": row.content,
-            "score": score
-        })
-
-    results.sort(
-        key=lambda x: x["score"],
-        reverse=True
+    job_config = bigquery.QueryJobConfig(
+        query_parameters=[
+            bigquery.ArrayQueryParameter(
+                "embedding",
+                "FLOAT64",
+                query_embedding,
+            )
+        ]
     )
 
-    return results[:top_k]
+    return client.query(
+        query,
+        job_config=job_config,
+    ).result()
