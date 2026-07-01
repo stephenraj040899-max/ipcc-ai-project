@@ -335,6 +335,50 @@ gcloud run deploy
 
 ---
 
+---
+
+# Application Screenshots
+
+## Dashboard
+
+![Dashboard](docs/screenshots/dashboard.png)
+
+---
+
+## Ask Questions (RAG)
+
+![Ask Questions](docs/screenshots/qa.png)
+
+---
+
+## Browse Original Documents
+
+![Browse Documents](docs/screenshots/browse-documents.png)
+
+---
+
+## Document Summary
+
+![Summary](docs/screenshots/summary.png)
+
+---
+
+## AI Review
+
+![Review](docs/screenshots/review.png)
+
+---
+
+## Improvement Suggestions
+
+![Improvements](docs/screenshots/improvements.png)
+
+---
+
+## About
+
+![About](docs/screenshots/about.png)
+
 # 🔮 Future Improvements
 
 - Compare multiple reports
