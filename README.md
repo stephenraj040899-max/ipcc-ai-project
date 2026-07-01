@@ -1,5 +1,13 @@
 # 🌍 IPCC Climate AI Assistant
 
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![Google Cloud](https://img.shields.io/badge/Google%20Cloud-Cloud%20Run-blue)
+![Vertex AI](https://img.shields.io/badge/Vertex%20AI-Embeddings-green)
+![BigQuery](https://img.shields.io/badge/BigQuery-Vector%20Search-orange)
+![Gemini](https://img.shields.io/badge/Gemini-2.5%20Flash-purple)
+![Streamlit](https://img.shields.io/badge/Frontend-Streamlit-red)
+![Docker](https://img.shields.io/badge/Docker-Container-blue)
+
 An AI-powered climate knowledge assistant built using **Google Cloud Platform**, **Vertex AI**, **Gemini 2.5 Flash**, **BigQuery Vector Search**, and **Streamlit**.
 
 The application enables users to explore the **IPCC Special Report on Cities (SRCities)** by asking natural language questions, browsing reports, generating summaries, reviewing documents, and receiving AI-powered improvement suggestions using Retrieval-Augmented Generation (RAG).
