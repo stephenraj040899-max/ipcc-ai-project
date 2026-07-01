@@ -22,6 +22,7 @@ Thumbs.db
 
 # Streamlit
 .streamlit/secrets.toml
+.streamlit/
 
 # Local configuration
 .env
@@ -31,3 +32,4 @@ downloads/
 
 # Generated files
 *.sqlite
+.idea/
